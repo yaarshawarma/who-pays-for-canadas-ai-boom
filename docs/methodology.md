@@ -54,6 +54,11 @@ Trailing windows of 126 and 252 trading days ending at *t*: `cov(excess_i, exces
 
 Hindsight ticker selection; XIC proxy; Yahoo adjusted-price methodology unverified; March 2020 dominates extreme observations; daily non-normality and volatility clustering; a full-sample β is an average over changing regimes; none of this measures AI-related exposure or causation.
 
+## Known data issues
+
+- **XIC 2021-12-30 (open).** Yahoo encodes iShares' reinvested year-end 2021 distribution as a 1.013171 "split". The resulting XIC adjusted return on 2021-12-30 (−1.44%) is about 1.2 pp below the S&P/TSX Composite index move (−0.24%). Beta impact ≈ +0.0005 (immaterial); XIC total return understated by ≈4 pp. Treatment for the performance table not yet decided. Details: `tests/adjustment_checks.md`.
+- Fortis adjustment dates sometimes fall on the record date rather than the listed ex-date (one trading day); amounts match Fortis's records.
+
 ## Change log
 
 - v0.1.1 (2026-11-06): Valet series ID fix; data snapshot + manifest; prior-day/act365 risk-free; HAC SE and Durbin-Watson; Sharpe on excess returns; annualized return; 252-day rolling beta; sensitivity grid; coverage report; G2 automated tests.
