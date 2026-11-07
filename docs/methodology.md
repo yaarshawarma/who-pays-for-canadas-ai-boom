@@ -56,10 +56,11 @@ Hindsight ticker selection; XIC proxy; Yahoo adjusted-price methodology unverifi
 
 ## Known data issues
 
-- **XIC 2021-12-30 (open).** Yahoo encodes iShares' reinvested year-end 2021 distribution as a 1.013171 "split". The resulting XIC adjusted return on 2021-12-30 (−1.44%) is about 1.2 pp below the S&P/TSX Composite index move (−0.24%). Beta impact ≈ +0.0005 (immaterial); XIC total return understated by ≈4 pp. Treatment for the performance table not yet decided. Details: `tests/adjustment_checks.md`.
+- **XIC 2021-12-30 (corrected, C001).** Yahoo encodes iShares' reinvested year-end 2021 distribution as a 1.013171 "split", giving an XIC adjusted return of −1.44% that day while the S&P/TSX Composite moved −0.24% and utilities were flat. The main specification replaces it with `index price return + cash distribution / previous close` = +0.36% (inputs and sources in `data/corrections.csv`). Uncorrected results are kept as a sensitivity (`Market_XIC_uncorrected`; "NO data corrections" row). Beta impact ≈ +0.0005; XIC total return 149.8% → 154.4%. Details: `tests/adjustment_checks.md`.
 - Fortis adjustment dates sometimes fall on the record date rather than the listed ex-date (one trading day); amounts match Fortis's records.
 
 ## Change log
 
+- v0.1.2 (2026-11-07): documented data-correction step (`data/corrections.csv`, C001 for XIC 2021-12-30); uncorrected XIC kept for sensitivity; 3 new G2 checks (32 total).
 - v0.1.1 (2026-11-06): Valet series ID fix; data snapshot + manifest; prior-day/act365 risk-free; HAC SE and Durbin-Watson; Sharpe on excess returns; annualized return; 252-day rolling beta; sensitivity grid; coverage report; G2 automated tests.
 - v0.1.0: original starter (`legacy_starter/01_market_risk_original.R`), not executable as delivered (Valet 404).

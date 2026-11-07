@@ -1,6 +1,6 @@
 # WHO PAYS FOR CANADA'S AI BOOM?
 # Module 01: Canadian utility market risk vs XIC (historical, descriptive only)
-# Version 0.1.1 (2026-11-06). Educational research only. Not investment advice.
+# Version 0.1.2 (2026-11-07). Educational research only. Not investment advice.
 #
 # Run from the project root:   Rscript R/01_market_risk.R
 # Re-download raw data:        REFRESH_DATA=1 Rscript R/01_market_risk.R
@@ -15,6 +15,7 @@
 #  6. Sharpe uses sd of EXCESS returns; geometric annualized return added.
 #  7. Rolling beta at 126 and 252 days; chart carries sample/source/as-of disclosures.
 #  8. Coverage report, as-of assertion, sensitivity grid, run_info.txt.
+#  9. Documented vendor-data corrections from data/corrections.csv (v0.1.2).
 # All outputs carry validation_status = "UNVALIDATED" until tests/ and manual checks pass.
 
 if (!file.exists("R/01_market_risk.R")) stop("Run this script from the project root folder.")
@@ -33,7 +34,8 @@ cfg <- list(
   rf_timing     = "prior",                 # "prior" or "same"
   rf_daycount   = "act365",                # "act365" or "cmp252"
   windows       = c(126, 252),
-  refresh       = identical(Sys.getenv("REFRESH_DATA"), "1")
+  refresh       = identical(Sys.getenv("REFRESH_DATA"), "1"),
+  apply_corrections = TRUE                 # data/corrections.csv (documented vendor-data fixes)
 )
 tickers <- c(Hydro_One = "H.TO", Fortis = "FTS.TO", Market_XIC = "XIC.TO")
 stocks  <- c("Hydro_One", "Fortis")
@@ -157,6 +159,29 @@ panel <- data.frame(
   rf_obs_date = rf_main$rf_obs_date, rf_yield_pct = rf_main$rf_yield_pct,
   rf_daily = to_daily(rf_main$rf_yield_pct, gap_days, cfg$rf_daycount)
 )
+
+# ---- Documented data corrections (data/corrections.csv) ---------------------
+# Each correction replaces one vendor return with a value rebuilt from stated
+# inputs. The uncorrected series is kept for sensitivity analysis.
+panel$Market_XIC_uncorrected <- panel$Market_XIC
+corr <- read.csv("data/corrections.csv", stringsAsFactors = FALSE)
+corr$date <- as.Date(corr$date)
+corr$corrected_return <- corr$index_close / corr$index_close_prev - 1 +
+  corr$cash_distribution / corr$prev_close
+corr$original_return <- NA_real_
+if (cfg$apply_corrections) {
+  for (i in seq_len(nrow(corr))) {
+    k <- which(panel$date == corr$date[i])
+    if (length(k) != 1) stop("Correction ", corr$correction_id[i], " date not in panel")
+    corr$original_return[i] <- panel[[corr$series[i]]][k]
+    panel[[corr$series[i]]][k] <- corr$corrected_return[i]
+  }
+}
+corr$applied <- cfg$apply_corrections
+write.csv(corr[, c("correction_id", "series", "date", "original_return", "corrected_return",
+                   "applied", "method", "status")],
+          "outputs/corrections_applied.csv", row.names = FALSE)
+
 if (anyNA(panel)) stop("Missing values in aligned panel")
 write.csv(panel, "data/processed/aligned_daily_returns.csv", row.names = FALSE)
 
@@ -210,6 +235,9 @@ for (nm in names(subsamples)) {
   sens[[length(sens) + 1]] <- cbind(spec = paste0(nm, " | rf main"),
                                     run_capm(panel[k, ], panel$rf_daily[k]))
 }
+uncorr <- panel; uncorr$Market_XIC <- uncorr$Market_XIC_uncorrected
+sens[[length(sens) + 1]] <- cbind(spec = "full | rf main | NO data corrections",
+                                  run_capm(uncorr, panel$rf_daily))
 capm_sensitivity <- do.call(rbind, sens)
 capm_sensitivity$validation_status <- STATUS
 
@@ -223,7 +251,7 @@ perf <- function(r, rf) {
     sharpe_annualized = mean(ex) / sd(ex) * sqrt(cfg$days_per_year),
     max_drawdown = min(w / pk - 1))
 }
-performance <- do.call(rbind, lapply(c(stocks, "Market_XIC"), function(s) {
+performance <- do.call(rbind, lapply(c(stocks, "Market_XIC", "Market_XIC_uncorrected"), function(s) {
   data.frame(series = s, t(perf(panel[[s]], panel$rf_daily)))
 }))
 performance <- cbind(performance, first_price_date = format(min(index(prices))),

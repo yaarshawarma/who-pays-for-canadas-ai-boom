@@ -47,6 +47,20 @@ for (nm in names(tickers)) for (dt in as.list(pick)) {
                 r, got, d$adjusted[i], d$adjusted[j], format(d$date[j])))
 }
 
+# 2b. Documented corrections: panel holds the recomputed value; the uncorrected
+#     column still equals the raw vendor return on that date.
+corr <- read.csv("data/corrections.csv", stringsAsFactors = FALSE); corr$date <- as.Date(corr$date)
+for (i in seq_len(nrow(corr))) {
+  v <- corr$index_close[i] / corr$index_close_prev[i] - 1 + corr$cash_distribution[i] / corr$prev_close[i]
+  k <- panel$date == corr$date[i]
+  check(sprintf("correction %s applied (%s %s)", corr$correction_id[i], corr$series[i], format(corr$date[i])),
+        abs(panel[[corr$series[i]]][k] - v) < tol, sprintf("%.6f", v))
+  d <- raw[[corr$series[i]]]; j <- match(corr$date[i], d$date)
+  check(sprintf("correction %s uncorrected column = raw vendor return", corr$correction_id[i]),
+        abs(panel$Market_XIC_uncorrected[k] - (d$adjusted[j] / d$adjusted[j - 1] - 1)) < tol)
+}
+check("no other XIC dates altered", sum(panel$Market_XIC != panel$Market_XIC_uncorrected) == nrow(corr))
+
 # 3. Risk-free: no look-ahead, units, conversion
 check("rf observation strictly before return date (prior timing)", all(panel$rf_obs_date < panel$date))
 check("rf yield equals raw BoC value on its observation date",

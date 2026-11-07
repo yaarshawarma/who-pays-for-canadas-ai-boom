@@ -1,7 +1,7 @@
 # Who Pays for Canada's AI Boom?
 ### Public research for Canadian individual investors — Starter project
 
-> **Status (v0.1.1, 2026-11-07): work in progress. No validated findings yet.** The Module 01 pipeline runs and passes its automated reconciliation tests, but external price checks are incomplete, so all numerical outputs are marked `UNVALIDATED`. Educational research only; not investment advice. Code: MIT. Documentation: CC BY 4.0 (see `LICENSE`).
+> **Status (v0.1.2, 2026-11-07): work in progress. No validated findings yet.** The Module 01 pipeline runs and passes its automated reconciliation tests, but external price checks are incomplete, so all numerical outputs are marked `UNVALIDATED`. Educational research only; not investment advice. Code: MIT. Documentation: CC BY 4.0 (see `LICENSE`).
 
 **Research question:** Are listed Canadian electricity-infrastructure businesses an attractive way to gain exposure to AI-driven power demand **after accounting for risk, financial fundamentals, and valuation**?
 
@@ -43,7 +43,9 @@ The first run downloads raw data into `data/raw/<as_of>/` with a `manifest.csv` 
    - `outputs/performance_results.csv`: total and annualized return, volatility, Sharpe (excess-return), max drawdown
    - `outputs/rolling_beta.csv`, `outputs/rolling_beta.png`: 126- and 252-day trailing beta (draft chart)
    - `outputs/ar1_checks.csv`: exploratory AR(1) with Ljung-Box on residuals and squared residuals
+   - `outputs/corrections_applied.csv`: documented vendor-data corrections (defined in `data/corrections.csv`)
    - `outputs/g2_automated_checks.csv`: independent recomputation checks
+   - `tests/adjustment_checks.md`: external checks of prices, dividends and distributions
    - `tests/manual_price_checks.csv`: template for checking 9 prices against an external source by hand
 
 Conventions and the changes from the original starter are documented in `docs/methodology.md`. The original starter script is kept unchanged in `legacy_starter/` for reference.
