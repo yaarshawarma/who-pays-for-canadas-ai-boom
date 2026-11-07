@@ -1,0 +1,14 @@
+# Raw vendor data: keep local until redistribution terms are confirmed
+data/raw/**/*.csv
+!data/raw/**/manifest.csv
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/staging/
+.DS_Store
+
+# Generated, vendor-derived or UNVALIDATED outputs: regenerate with the scripts
+data/processed/*.csv
+outputs/*
+!outputs/.gitkeep
