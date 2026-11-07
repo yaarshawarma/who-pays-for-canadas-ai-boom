@@ -8,7 +8,8 @@ Checks performed with AI assistance (Claude) using a web browser; the user shoul
 | Ticker | Source | Result |
 |---|---|---|
 | H.TO | Hydro One IR stock-information page, third-party quote widget, "Unadjusted" view | 3/3 closes match (24.91, 38.37, 57.60); daily % changes match computed returns |
-| FTS.TO, XIC.TO | TMX Money price history | **Not checked.** Page did not load on 2026-11-07 even when signed in (requests returned HTTP 503). Fortis IR has no price lookup; Stooq is bot-gated. Retry later. |
+| FTS.TO | MarketWatch historical quotes (TMX Money price history returned HTTP 503) | 3/3 closes match (54.00, 57.63, 85.79) |
+| XIC.TO | MarketWatch historical quotes | 2/3 match exactly (31.84, 56.90). 2020-01-03: MarketWatch 27.13 vs Yahoo 27.4873 = 27.13 × 1.013171 — Yahoo scales all pre-2021-12-30 XIC prices by its "split" factor. Daily returns on other dates are unaffected (the factor cancels); see C001 below. |
 
 ## 2. Dividend / distribution adjustments (Yahoo adjusted ÷ close)
 
@@ -24,11 +25,13 @@ Method: on each date where the ratio `adjusted / close` changes, the implied cas
 - Recent cash distributions match the iShares distribution history (https://www.blackrock.com/ca/investors/en/products/239837/, viewed 2026-11-07), e.g. 2025-12-30 $0.281 and 2026-03-26 $0.272.
 - iShares reports 2021 total distributions for tax purposes of $1.19517 per unit, well above the ~$0.80 of regular quarterly cash distributions — i.e. a reinvested (non-cash) year-end distribution. Yahoo encodes this as a 1.013171 "split".
 - Cross-check against the S&P/TSX Composite price index (^GSPTSE): over 1,718 days the XIC adjusted return differs from the index return by more than 0.75 pp on only two dates: 2020-03-19 (−0.77 pp, crash-period close timing) and **2021-12-30 (−1.20 pp)**. On 2021-12-30 the index fell 0.235% while the XIC adjusted return is −1.436%, and H and FTS were flat.
-- **Result: ISSUE FOUND → CORRECTED (v0.1.2).** Yahoo's record also shows a regular $0.206 cash distribution on 2021-12-30. A clean XIC adjusted return should therefore be close to the index price move plus the cash yield: −0.235% + 0.206/34.559 (0.596%) ≈ **+0.361%**, versus −1.436% in the Yahoo data — a distortion of about −1.8 pp (the −1.2 pp above compares with the index price move only, without adding back the cash distribution).
-- Correction C001 (`data/corrections.csv`) replaces that single return with the rebuilt value; the uncorrected series is kept as `Market_XIC_uncorrected`. Remaining approximation: XIC's own close-to-close tracking difference vs the index on that day (typically a few basis points) is ignored.
-- Impact (unvalidated outputs): beta +0.0004/+0.0005 (Hydro One 0.4474 → 0.4478; Fortis 0.5654 → 0.5659) — immaterial. XIC sample total return 149.8% → 154.4%; annualized 14.3% → 14.6%; Sharpe 0.726 → 0.741; max drawdown unchanged.
+- **Result: ISSUE FOUND → CORRECTED.** Actual exchange closes (MarketWatch): 2021-12-29 **$34.11**, 2021-12-30 **$33.86**; cash distribution $0.206 (Yahoo dividend record). Total return = (33.86 + 0.206) / 34.11 − 1 = **−0.129%**, versus −1.436% in the Yahoo adjusted series: a distortion of about −1.31 pp, matching Yahoo's 1.3171% price scaling.
+- **Revision note.** v0.1.2 (earlier the same day) rebuilt this return as index price return + cash yield (+0.361%). That double-counted the distribution, because an ETF's quarterly payout passes through dividends earned over the whole quarter, not on that day. v0.1.3 replaces it with the actual-closes method above.
+- Correction C001 (`data/corrections.csv`) replaces that single return; the uncorrected series is kept as `Market_XIC_uncorrected`.
+- Impact (unvalidated outputs): beta +0.0004/+0.0005 (Hydro One 0.4474 → 0.4479; Fortis 0.5654 → 0.5659) — immaterial. XIC sample total return 149.8% → 153.1%; annualized 14.3% → 14.5%; Sharpe 0.726 → 0.737; max drawdown unchanged.
 
 ## Status
 
-- CAPM / beta inputs: acceptable for G2 subject to the user's spot-check; Fortis and XIC closing prices still unchecked.
+- Closing prices: 9/9 checked against an independent source (H via issuer widget; FTS and XIC via MarketWatch). All consistent with Yahoo once the XIC scaling is accounted for.
+- CAPM / beta inputs: acceptable for G2 subject to the user's spot-check.
 - Performance table: XIC 2021-12-30 corrected (C001); uncorrected figures reported alongside.

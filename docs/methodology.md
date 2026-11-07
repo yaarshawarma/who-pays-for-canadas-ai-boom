@@ -56,11 +56,12 @@ Hindsight ticker selection; XIC proxy; Yahoo adjusted-price methodology unverifi
 
 ## Known data issues
 
-- **XIC 2021-12-30 (corrected, C001).** Yahoo encodes iShares' reinvested year-end 2021 distribution as a 1.013171 "split", giving an XIC adjusted return of −1.44% that day while the S&P/TSX Composite moved −0.24% and utilities were flat. The main specification replaces it with `index price return + cash distribution / previous close` = +0.36% (inputs and sources in `data/corrections.csv`). Uncorrected results are kept as a sensitivity (`Market_XIC_uncorrected`; "NO data corrections" row). Beta impact ≈ +0.0005; XIC total return 149.8% → 154.4%. Details: `tests/adjustment_checks.md`.
+- **XIC 2021-12-30 (corrected, C001).** Yahoo encodes iShares' reinvested year-end 2021 distribution as a 1.013171 "split" and scales all earlier XIC prices up by that factor, so the 2021-12-30 adjusted return is −1.44%. Rebuilt from actual exchange closes (MarketWatch: $34.11 → $33.86) plus the $0.206 cash distribution: −0.129%. Uncorrected results are kept as a sensitivity (`Market_XIC_uncorrected`; "NO data corrections" row). Beta impact ≈ +0.0005; XIC total return 149.8% → 153.1%. Details: `tests/adjustment_checks.md`.
 - Fortis adjustment dates sometimes fall on the record date rather than the listed ex-date (one trading day); amounts match Fortis's records.
 
 ## Change log
 
+- v0.1.3 (2026-11-07): C001 rebuilt from actual XIC closes (−0.129%) instead of index return + cash yield (+0.361%, which double-counted the distribution); FTS and XIC closing prices checked against MarketWatch (9/9 price checks done).
 - v0.1.2 (2026-11-07): documented data-correction step (`data/corrections.csv`, C001 for XIC 2021-12-30); uncorrected XIC kept for sensitivity; 3 new G2 checks (32 total).
 - v0.1.1 (2026-11-06): Valet series ID fix; data snapshot + manifest; prior-day/act365 risk-free; HAC SE and Durbin-Watson; Sharpe on excess returns; annualized return; 252-day rolling beta; sensitivity grid; coverage report; G2 automated tests.
 - v0.1.0: original starter (`legacy_starter/01_market_risk_original.R`), not executable as delivered (Valet 404).

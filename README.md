@@ -1,7 +1,7 @@
 # Who Pays for Canada's AI Boom?
 ### Public research for Canadian individual investors — Starter project
 
-> **Status (v0.1.2, 2026-11-07): work in progress. No validated findings yet.** The Module 01 pipeline runs and passes its automated reconciliation tests, but external price checks are incomplete, so all numerical outputs are marked `UNVALIDATED`. Educational research only; not investment advice. Code: MIT. Documentation: CC BY 4.0 (see `LICENSE`).
+> **Status (v0.1.3, 2026-11-07): work in progress. No validated findings yet.** The Module 01 pipeline runs and passes its automated reconciliation tests, and closing prices, dividends and distributions have been checked against independent sources (one vendor-data error found and corrected). Outputs stay marked `UNVALIDATED` until the author's final review. Educational research only; not investment advice. Code: MIT. Documentation: CC BY 4.0 (see `LICENSE`).
 
 **Research question:** Are listed Canadian electricity-infrastructure businesses an attractive way to gain exposure to AI-driven power demand **after accounting for risk, financial fundamentals, and valuation**?
 

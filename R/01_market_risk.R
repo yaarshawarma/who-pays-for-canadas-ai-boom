@@ -1,6 +1,6 @@
 # WHO PAYS FOR CANADA'S AI BOOM?
 # Module 01: Canadian utility market risk vs XIC (historical, descriptive only)
-# Version 0.1.2 (2026-11-07). Educational research only. Not investment advice.
+# Version 0.1.3 (2026-11-07). Educational research only. Not investment advice.
 #
 # Run from the project root:   Rscript R/01_market_risk.R
 # Re-download raw data:        REFRESH_DATA=1 Rscript R/01_market_risk.R
@@ -166,8 +166,7 @@ panel <- data.frame(
 panel$Market_XIC_uncorrected <- panel$Market_XIC
 corr <- read.csv("data/corrections.csv", stringsAsFactors = FALSE)
 corr$date <- as.Date(corr$date)
-corr$corrected_return <- corr$index_close / corr$index_close_prev - 1 +
-  corr$cash_distribution / corr$prev_close
+corr$corrected_return <- (corr$close + corr$cash_distribution) / corr$close_prev - 1
 corr$original_return <- NA_real_
 if (cfg$apply_corrections) {
   for (i in seq_len(nrow(corr))) {

@@ -51,7 +51,7 @@ for (nm in names(tickers)) for (dt in as.list(pick)) {
 #     column still equals the raw vendor return on that date.
 corr <- read.csv("data/corrections.csv", stringsAsFactors = FALSE); corr$date <- as.Date(corr$date)
 for (i in seq_len(nrow(corr))) {
-  v <- corr$index_close[i] / corr$index_close_prev[i] - 1 + corr$cash_distribution[i] / corr$prev_close[i]
+  v <- (corr$close[i] + corr$cash_distribution[i]) / corr$close_prev[i] - 1
   k <- panel$date == corr$date[i]
   check(sprintf("correction %s applied (%s %s)", corr$correction_id[i], corr$series[i], format(corr$date[i])),
         abs(panel[[corr$series[i]]][k] - v) < tol, sprintf("%.6f", v))
