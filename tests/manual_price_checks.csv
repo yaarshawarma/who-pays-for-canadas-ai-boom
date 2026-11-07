@@ -1,10 +1,10 @@
-"ticker","date","yahoo_close","yahoo_adjusted","computed_simple_return","external_source","external_close","dividends_or_distributions_checked","matches","checked_by","checked_on"
-"H.TO","2020-01-03",24.9099998474121,20.2414798736572,0.00565228787502581,"","","","","",""
-"H.TO","2023-06-05",38.3699989318848,34.8131370544434,-0.0121009863559037,"","","","","",""
-"H.TO","2026-11-05",57.5999984741211,57.5999984741211,0.0073451935415132,"","","","","",""
-"FTS.TO","2020-01-03",54,41.8934020996094,0.00502507780131012,"","","","","",""
-"FTS.TO","2023-06-05",57.6300010681152,50.9022216796875,-0.000173384946201338,"","","","","",""
-"FTS.TO","2026-11-05",85.7900009155273,85.7900009155273,0.00893804712620372,"","","","","",""
-"XIC.TO","2020-01-03",27.4873352050781,22.7277088165283,-0.00220670900497677,"","","","","",""
-"XIC.TO","2023-06-05",31.8400001525879,29.0531692504883,-0.00437767902027253,"","","","","",""
-"XIC.TO","2026-11-05",56.9000015258789,56.9000015258789,-0.0206539927669138,"","","","","",""
+ticker,date,yahoo_close,yahoo_adjusted,computed_simple_return,external_source,external_close,dividends_or_distributions_checked,matches,checked_by,checked_on
+H.TO,2020-01-03,24.9099998474121,20.2414798736572,0.00565228787502581,"Hydro One IR stock-information page (third-party quote widget), Unadjusted view; https://www.hydroone.com/investor-relations/stock-information",24.91,return check only; issuer adjusted view % chg +0.57% vs computed +0.565%,yes (close and daily return),Claude (AI-assisted lookup; user to spot-check),2026-11-07
+H.TO,2023-06-05,38.3699989318848,34.8131370544434,-0.0121009863559037,"Hydro One IR stock-information page (third-party quote widget), Unadjusted view; https://www.hydroone.com/investor-relations/stock-information",38.37,return check only; issuer % chg -1.21% vs computed -1.210%,yes (close and daily return),Claude (AI-assisted lookup; user to spot-check),2026-11-07
+H.TO,2026-11-05,57.5999984741211,57.5999984741211,0.0073451935415132,"Hydro One IR stock-information page (third-party quote widget), Unadjusted view; https://www.hydroone.com/investor-relations/stock-information",57.60,return check only; issuer % chg +0.74% (prev 57.18) vs computed +0.735%,yes (close and daily return),Claude (AI-assisted lookup; user to spot-check),2026-11-07
+FTS.TO,2020-01-03,54,41.8934020996094,0.00502507780131012,PENDING: TMX Money price history needs sign-in; Fortis IR has no price lookup,,,pending,,
+FTS.TO,2023-06-05,57.6300010681152,50.9022216796875,-0.000173384946201338,PENDING: TMX Money price history needs sign-in; Fortis IR has no price lookup,,,pending,,
+FTS.TO,2026-11-05,85.7900009155273,85.7900009155273,0.00893804712620372,PENDING: TMX Money price history needs sign-in; Fortis IR has no price lookup,,,pending,,
+XIC.TO,2020-01-03,27.4873352050781,22.7277088165283,-0.00220670900497677,PENDING: TMX Money price history needs sign-in; Fortis IR has no price lookup,,,pending,,
+XIC.TO,2023-06-05,31.8400001525879,29.0531692504883,-0.00437767902027253,PENDING: TMX Money price history needs sign-in; Fortis IR has no price lookup,,,pending,,
+XIC.TO,2026-11-05,56.9000015258789,56.9000015258789,-0.0206539927669138,PENDING: TMX Money price history needs sign-in; Fortis IR has no price lookup,,,pending,,

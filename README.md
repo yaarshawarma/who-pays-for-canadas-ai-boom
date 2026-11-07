@@ -1,6 +1,8 @@
 # Who Pays for Canada's AI Boom?
 ### Public research for Canadian individual investors — Starter project
 
+> **Status (v0.1.1, 2026-11-07): work in progress. No validated findings yet.** The Module 01 pipeline runs and passes its automated reconciliation tests, but external price checks are incomplete, so all numerical outputs are marked `UNVALIDATED`. Educational research only; not investment advice. Code: MIT. Documentation: CC BY 4.0 (see `LICENSE`).
+
 **Research question:** Are listed Canadian electricity-infrastructure businesses an attractive way to gain exposure to AI-driven power demand **after accounting for risk, financial fundamentals, and valuation**?
 
 This is an **independent educational research project**, not a sponsored Jarislowsky Fraser or Scotiabank project, and not personal investment advice. The first empirical study compares Hydro One (TSX: H) and Fortis (TSX: FTS) with a broad Canadian stock-market proxy, XIC (TSX: XIC). It does **not** claim that any historical returns were caused by AI-related demand.
